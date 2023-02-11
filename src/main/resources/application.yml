@@ -1,0 +1,7 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+
+server:
+  port : 8000

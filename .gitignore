@@ -1,0 +1,46 @@
+.gradle/
+**/build/
+!src/**/build/
+ktunnel.bat
+system-tests/test.properties
+
+# Idea files.
+.idea/
+!.idea/runConfigurations/
+!.idea/codeStyleSettings.xml
+system-tests/.idea/
+*.iml
+out/
+generated/
+
+# Log file.
+*.log
+
+# Package Files.
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# ovpn files ignore
+*.ovpn
+
+# Macos garbage
+.DS_Store
+.project
+.settings
+.classpath
+.factorypath
+.editorconfig
+.vscode
+**/.allure/**
+target/
+/gw
+/Process
+/Run
+/Task
+/.jpb/persistence-units.xml
+!/gradle/wrapper/gradle-wrapper.jar
+
