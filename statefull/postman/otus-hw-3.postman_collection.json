@@ -1,0 +1,271 @@
+{
+	"info": {
+		"_postman_id": "ecaca846-8164-4f65-8e3a-16010aea8091",
+		"name": "otus-hw-3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "task-3",
+			"item": [
+				{
+					"name": "1. check alive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The response is correct\", function () {\r",
+									"    const response = pm.response.text();\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(response).to.include(\"Hello from \");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://arch.homework/otusapp/aleksandr/",
+							"protocol": "http",
+							"host": [
+								"arch",
+								"homework"
+							],
+							"path": [
+								"otusapp",
+								"aleksandr",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The response is correct\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    \r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(response.userName).to.eql(\"Alice Marshall\");\r",
+									"    pm.expect(response.firstName).to.eql(\"Alice\");\r",
+									"    pm.expect(response.lastName).to.eql(\"Marshall\");\r",
+									"    pm.expect(response.email).to.eql(\"alice@gg.com\");\r",
+									"    pm.expect(response.phone).to.eql(\"+123456789\");\r",
+									"\r",
+									"    pm.environment.set(\"currentId\", response.userId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"Alice Marshall\",\r\n    \"firstName\": \"Alice\",\r\n    \"lastName\": \"Marshall\",\r\n    \"email\": \"alice@gg.com\",\r\n    \"phone\": \"+123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://arch.homework/otusapp/aleksandr/user",
+							"protocol": "http",
+							"host": [
+								"arch",
+								"homework"
+							],
+							"path": [
+								"otusapp",
+								"aleksandr",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. get user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The response is correct\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    \r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(response.userName).to.eql(\"Alice Marshall\");\r",
+									"    pm.expect(response.firstName).to.eql(\"Alice\");\r",
+									"    pm.expect(response.lastName).to.eql(\"Marshall\");\r",
+									"    pm.expect(response.email).to.eql(\"alice@gg.com\");\r",
+									"    pm.expect(response.phone).to.eql(\"+123456789\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://arch.homework/otusapp/aleksandr/user/{{currentId}}",
+							"protocol": "http",
+							"host": [
+								"arch",
+								"homework"
+							],
+							"path": [
+								"otusapp",
+								"aleksandr",
+								"user",
+								"{{currentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. update user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The response is correct\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    \r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(response.userName).to.eql(\"Alice Mac Marshall\");\r",
+									"    pm.expect(response.firstName).to.eql(null);\r",
+									"    pm.expect(response.lastName).to.eql(\"Marshall\");\r",
+									"    pm.expect(response.email).to.eql(\"alice-mac@gg.com\");\r",
+									"    pm.expect(response.phone).to.eql(null);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"Alice Mac Marshall\",\r\n    \"firstName\": null,\r\n    \"lastName\": \"Marshall\",\r\n    \"email\": \"alice-mac@gg.com\",\r\n    \"phone\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://arch.homework/otusapp/aleksandr/user/{{currentId}}",
+							"protocol": "http",
+							"host": [
+								"arch",
+								"homework"
+							],
+							"path": [
+								"otusapp",
+								"aleksandr",
+								"user",
+								"{{currentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. delete user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The response is correct\", function () {\r",
+									"    const response = pm.response.text();\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(response).to.include(\"User with id \" + pm.environment.get(\"currentId\") + \" successfully deleted.\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://arch.homework/otusapp/aleksandr/user/{{currentId}}",
+							"protocol": "http",
+							"host": [
+								"arch",
+								"homework"
+							],
+							"path": [
+								"otusapp",
+								"aleksandr",
+								"user",
+								"{{currentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. check successfully deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"The response is correct\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    \r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.expect(response.errorMessage).to.eql(\"User with id \" + pm.environment.get(\"currentId\") + \" not found!\");\r",
+									"    pm.expect(response.status).to.eql(\"FAILURE\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://arch.homework/otusapp/aleksandr/user/{{currentId}}",
+							"protocol": "http",
+							"host": [
+								"arch",
+								"homework"
+							],
+							"path": [
+								"otusapp",
+								"aleksandr",
+								"user",
+								"{{currentId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

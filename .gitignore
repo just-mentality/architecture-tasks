@@ -44,3 +44,6 @@ target/
 /.jpb/persistence-units.xml
 !/gradle/wrapper/gradle-wrapper.jar
 
+*.tgz
+*.lock
+

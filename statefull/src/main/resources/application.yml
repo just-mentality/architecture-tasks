@@ -1,0 +1,25 @@
+server:
+  port : 8000
+
+spring:
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    url: ${DATABASE_URI}
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQL81Dialect
+
+springdoc:
+  api-docs:
+    path: /api-docs
+
+app:
+  hello:
+    name: ${HELLO_NAME}
