@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eternality-config
+data:
+  HELLO_NAME: Aleksandr
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: eternality-secret
+type: Opaque
+data:
+  # DATABASE_URI: {{ printf "jdbc:postgresql://%s:%s/%s" (include "postgresql.fullname" .) .Values.postgresql.service.port .Values.postgresql.postgresqlDatabase | b64enc | quote }}
+  # DATABASE_URI: {{ printf "jdbc:postgresql://%s:%s/%s?user=%s&password=%s" (include "postgresql.fullname" .) .Values.postgresql.service.port .Values.postgresql.postgresqlDatabase .Values.postgresql.postgresqlUsername .Values.postgresql.postgresqlPassword | b64enc | quote }}
+  DATABASE_URI: {{ printf "jdbc:postgresql://%s:%s/%s?user=%s&password=%s" (include "postgresql.fullname" .) .Values.postgresql.service.port .Values.postgresql.postgresqlDatabase .Values.postgresql.postgresqlUsername .Values.postgresql.postgresqlPassword | b64enc | quote }}
+
+  # DB_USERNAME: {{ .Values.postgresql.postgresqlUsername | b64enc | quote }}
+  # DB_PASSWORD: {{ .Values.postgresql.postgresqlPassword | b64enc | quote }}

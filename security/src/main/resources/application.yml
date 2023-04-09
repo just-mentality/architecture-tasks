@@ -1,0 +1,50 @@
+server:
+  port : 8000
+
+spring:
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    url: ${DATABASE_URI}
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQL81Dialect
+  flyway:
+    locations: classpath:db/migration
+    enabled: true
+    baselineOnMigrate: true
+  security:
+    user:
+      password: password
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui
+
+app:
+  hello:
+    name: "Eternality"
+
+jwt:
+  public:
+    key: classpath:rsa.public.key
+  private:
+    key: classpath:rsa.private.key
+
+management:
+   security:
+      enabled: false
+
+logging:
+  level:
+    org.hibernate.sql: debug
+    root: info

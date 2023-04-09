@@ -1,0 +1,44 @@
+server:
+  port : 8000
+
+spring:
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:comprocdb;MODE=Oracle;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 5
+      idle-timeout: 30000
+      connection-test-query: SELECT 1 FROM DUAL
+  h2.console.enabled: true
+  jpa:
+    open-in-view: false
+  flyway:
+    locations: classpath:db/migration
+  #sql:
+    #init:
+      # schema-locations: classpath:sql/schema.sql
+      #mode: always
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui
+
+app:
+  hello:
+    name: ${HELLO_NAME:Aleksandr}
+
+jwt:
+  public:
+    key: classpath:rsa.public.key
+  private:
+    key: classpath:rsa.private.key
