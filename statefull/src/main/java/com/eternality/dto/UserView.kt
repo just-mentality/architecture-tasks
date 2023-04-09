@@ -1,6 +1,6 @@
 package com.eternality.dto
 
-data class User(
+data class UserView(
     var userId: Long,
     var userName: String? = null,
     var firstName: String? = null,

@@ -13,13 +13,16 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
+import org.mockito.Mockito.`when`
 
 @TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
 class UserControllerTest : AbstractTest() {
 
+
     private companion object {
         val REQUEST = CreateUserRequest(
             userName = "Alice Marshall",
+            password = "123",
             firstName = "Alice",
             lastName = "Marshall",
             email = "alice@gg.com",
@@ -30,6 +33,7 @@ class UserControllerTest : AbstractTest() {
     @BeforeAll
     fun cleanBeforeAll() {
         cleanTestProcessInformation()
+        `when`(principal.name).thenReturn("test")
     }
 
     @AfterEach
@@ -64,7 +68,8 @@ class UserControllerTest : AbstractTest() {
     fun `test get user`() {
         // act
         val createdUser = userController.createUser(REQUEST)
-        val foundUser = userController.getUser(createdUser.userId)
+        `when`(principal.name).thenReturn("${createdUser.userId},${createdUser.userName}")
+        val foundUser = userController.getUser(createdUser.userId, principal)
 
         // assert
         assertThat(foundUser.userId).isNotNull
@@ -81,12 +86,13 @@ class UserControllerTest : AbstractTest() {
         // act
         val createdUser = userController.createUser(REQUEST)
         val userId = createdUser.userId
-        assertDoesNotThrow { userController.getUser(userId) }
+        `when`(principal.name).thenReturn("${userId},${createdUser.userName}")
+        assertDoesNotThrow { userController.getUser(userId, principal) }
 
-        val result = userController.deleteUser(userId)
+        val result = userController.deleteUser(userId, principal)
         assertThat(result).isEqualTo("User with id $userId successfully deleted.")
 
-        val serviceException = assertThrows<ServiceException> { userController.getUser(userId) }
+        val serviceException = assertThrows<ServiceException> { userController.getUser(userId, principal) }
         assertThat(serviceException.message).isEqualTo("User with id $userId not found!")
     }
 
@@ -95,7 +101,8 @@ class UserControllerTest : AbstractTest() {
         // arrange
         val createdUser = userController.createUser(REQUEST)
         val userId = createdUser.userId
-        assertDoesNotThrow { userController.getUser(userId) }
+        `when`(principal.name).thenReturn("${userId},${createdUser.userName}")
+        assertDoesNotThrow { userController.getUser(userId, principal) }
 
         val updateRequest = UpdateUserRequest.builder()
             .userName(Optional.of("Alice Mac Marshall"))
@@ -105,7 +112,7 @@ class UserControllerTest : AbstractTest() {
             .build()
 
         // act
-        val updatedUser = userController.updateUser(userId = userId, request = updateRequest)
+        val updatedUser = userController.updateUser(userId = userId, request = updateRequest, principal = principal)
 
         assertThat(updatedUser.userId).isNotNull
         assertThat(updatedUser.userId).isEqualTo(createdUser.userId)

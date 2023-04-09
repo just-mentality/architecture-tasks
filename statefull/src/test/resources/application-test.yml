@@ -19,11 +19,26 @@ spring:
   h2.console.enabled: true
   jpa:
     open-in-view: false
-  sql:
-    init:
-      schema-locations: classpath:sql/schema.sql
-      mode: always
+  flyway:
+    locations: classpath:db/migration
+  #sql:
+    #init:
+      # schema-locations: classpath:sql/schema.sql
+      #mode: always
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui
 
 app:
   hello:
     name: ${HELLO_NAME:Aleksandr}
+
+jwt:
+  public:
+    key: classpath:rsa.public.key
+  private:
+    key: classpath:rsa.private.key

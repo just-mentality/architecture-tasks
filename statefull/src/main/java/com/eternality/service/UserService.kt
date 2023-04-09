@@ -4,26 +4,49 @@ import com.eternality.domain.UserEntity
 import com.eternality.domain.repository.UserRepository
 import com.eternality.dto.CreateUserRequest
 import com.eternality.dto.UpdateUserRequest
-import com.eternality.dto.User
+import com.eternality.dto.UserView
 import com.eternality.exception.ServiceException
 import com.eternality.mapper.mapToUser
 import com.eternality.mapper.mapToUserEntity
-import java.util.Optional
+import org.slf4j.LoggerFactory
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
+import java.security.Principal
+import java.util.Optional
+import javax.validation.ValidationException
 
 @Service
-class UserService(private val userRepository: UserRepository) {
+class UserService(
+    private val userRepository: UserRepository,
+    private var passwordEncoder: PasswordEncoder
+    ) {
+
+    private val log = LoggerFactory.getLogger(this.javaClass)
+
+    fun haveAccessToUser(userId: Long, principal: Principal): Boolean {
+        val principalName = principal.name
+        val user = getUserById(userId)
+        if (String.format("%s,%s", user.userId, user.userName) == principalName) {
+            return true
+        }
+        return false
+    }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    fun createUser(request: CreateUserRequest): User =
-        userRepository.findByUserName(request.userName).orElseGet {
-            userRepository.saveAndFlush(request.mapToUserEntity())
-        }.mapToUser()
+    fun createUser(request: CreateUserRequest): UserView {
+        if (userRepository.findByUserName(request.userName).isPresent) {
+            throw ValidationException("User with userName=${request.userName} already exists!")
+        }
+        val userEntity: UserEntity = userRepository.saveAndFlush(request.mapToUserEntity(passwordEncoder))
+        log.info("Created new user with id=${userEntity.userId}, name=${userEntity.userName}")
+        return userEntity.mapToUser()
+    }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    fun updateUser(userId: Long, request: UpdateUserRequest): User {
+    fun updateUser(userId: Long, request: UpdateUserRequest): UserView {
         val userEntity = getUserById(userId)
         request.apply {
             if (this.userName.needUpdate()) {
@@ -46,7 +69,7 @@ class UserService(private val userRepository: UserRepository) {
     }
 
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
-    fun getUser(userId: Long): User =
+    fun getUser(userId: Long): UserView =
         getUserById(userId).mapToUser()
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
